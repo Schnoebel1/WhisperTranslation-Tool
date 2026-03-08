@@ -43,32 +43,35 @@ WhisperTranslation Tool/
 
 ---
 
-## Installation
+### Installation & Weitergabe
 
-### Prerequisites
+Es gibt zwei Wege, wie du das Tool auf deinem eigenen PC installieren oder an Freunde weitergeben kannst.
 
-- **Python 3.11** (recommended) – [python.org/downloads](https://www.python.org/downloads/)
-- **NVIDIA GPU** (optional, for CUDA acceleration) – works without GPU via CPU fallback
+#### Methode 1: Die schnelle `.bat` Installation (Empfohlen für Freunde)
+Der beste Weg, um das Tool an Freunde weiterzugeben, ist das Mitschicken der Installations-Datei.
+Das spart dir hunderte Megabyte beim Verschicken, da die KI-Modelle und Bibliotheken erst beim Freund heruntergeladen werden.
 
-### Step 1: Clone or Download
+1. Lösche den `venv/` Ordner (falls vorhanden, da dieser nur für deinen PC gilt).
+2. Packe den kompletten Projektordner in eine ZIP-Datei und schicke sie deinem Freund.
+3. Dein Freund entpackt die ZIP-Datei und führt **`Install-Whisper-Tool.bat`** per Doppelklick aus.
+4. Das Skript installiert automatisch Python (falls nötig), lädt alle benötigten Bibliotheken herunter und erstellt eine Verknüpfung auf dem Desktop.
 
-Place the project folder somewhere convenient, e.g.:
-```
-C:\Users\YourName\Desktop\SoftwareEntwicklungen\WhisperTranslation Tool
-```
+#### Methode 2: Die Standalone `.exe` bauen (PyInstaller)
+Wenn du möchtest, dass Freunde überhaupt gar nichts installieren müssen (auch kein Python), kannst du eine eigenständige `.exe` bauen.
+*Warnung: Der Build wird extrem groß (ca. 300+ MB) und Virenscanner schlagen bei solchen gesammelten KI-Programmen oft fälschlicherweise Alarm.*
 
-### Step 2: Create Virtual Environment
+1. Führe die Datei **`build_exe.bat`** per Doppelklick aus.
+2. Warte, bis der Build-Prozess abgeschlossen ist.
+3. Im Projektordner entsteht ein neuer Ordner namens **`dist/app`**.
+4. Kopiere diesen gesamten Ordner (du kannst ihn z.B. in `WhisperTool` umbenennen), packe ihn in eine ZIP-Datei und verschicke ihn.
+5. Dein Freund muss die ZIP entpacken und einfach die **`app.exe`** ausführen.
 
-Open a terminal in the project directory:
+#### Methode 3: Manuelle Installation für Entwickler
+
 ```powershell
 cd "C:\Users\YourName\Desktop\SoftwareEntwicklungen\WhisperTranslation Tool"
 python -m venv venv
 .\venv\Scripts\activate
-```
-
-### Step 3: Install Dependencies
-
-```powershell
 pip install -r requirements.txt
 ```
 
