@@ -21,7 +21,7 @@ DEFAULTS = {
     "compute_type_cpu": "int8",
     "auto_copy": True,
     "auto_paste": False,
-    "notifications": True,
+    "notifications": False,
     "play_sound": True,
     "hotkey": "ctrl+alt+space",
     "save_logs": True,

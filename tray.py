@@ -153,43 +153,44 @@ class TrayApp:
     # ── Private ─────────────────────────────────────────────────────────
 
     def _create_icon(self, state: AppState) -> Image.Image:
-        """Generate a simple colored circle icon for the given state."""
+        """Load the app icon and draw a status indicator badge."""
         size = 64
-        img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-        draw = ImageDraw.Draw(img)
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon.png")
+        
+        try:
+            base_img = Image.open(icon_path).convert("RGBA")
+            base_img = base_img.resize((size, size), Image.Resampling.LANCZOS)
+        except Exception as e:
+            logger.warning("Could not load icon.png: %s", e)
+            base_img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(base_img)
+            draw.ellipse([4, 4, size - 4, size - 4], fill="#333333", outline="#FFFFFF")
+
+        # In IDLE state, just show the logo
+        if state == AppState.IDLE:
+            return base_img
+
+        # For other states, draw a badge in the bottom-right corner
+        badge_radius = 12
+        badge_center_x = size - badge_radius - 2
+        badge_center_y = size - badge_radius - 2
+        
         color = STATE_COLORS.get(state, "#4CAF50")
-        margin = 4
+        
+        draw = ImageDraw.Draw(base_img)
         draw.ellipse(
-            [margin, margin, size - margin, size - margin],
+            [
+                badge_center_x - badge_radius,
+                badge_center_y - badge_radius,
+                badge_center_x + badge_radius,
+                badge_center_y + badge_radius
+            ],
             fill=color,
             outline="#FFFFFF",
             width=2,
         )
 
-        # Add a letter indicator
-        letter = {
-            AppState.IDLE: "W",
-            AppState.RECORDING: "●",
-            AppState.TRANSCRIBING: "⏳",
-            AppState.COPIED: "✓",
-            AppState.ERROR: "!",
-            AppState.LOADING: "…",
-        }.get(state, "W")
-
-        try:
-            # Use a basic font; may fall back to default
-            font = ImageFont.truetype("arial.ttf", 24)
-        except (OSError, IOError):
-            font = ImageFont.load_default()
-
-        bbox = draw.textbbox((0, 0), letter, font=font)
-        text_w = bbox[2] - bbox[0]
-        text_h = bbox[3] - bbox[1]
-        x = (size - text_w) // 2
-        y = (size - text_h) // 2 - 2
-        draw.text((x, y), letter, fill="#FFFFFF", font=font)
-
-        return img
+        return base_img
 
     def _handle_toggle(self, icon=None, item=None) -> None:
         if self._on_toggle_recording:

@@ -6,6 +6,7 @@
     "compute_type_cpu": "int8",
     "auto_copy": true,
     "auto_paste": false,
+    "notifications": false,
     "hotkey": "ctrl+alt+space",
     "save_logs": true,
     "log_level": "INFO",
@@ -15,5 +16,6 @@
     "channels": 1,
     "min_recording_seconds": 0.5,
     "beam_size": 5,
-    "vad_filter": true
+    "vad_filter": true,
+    "play_sound": true
 }

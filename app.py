@@ -122,6 +122,23 @@ class WhisperTranslationApp:
             if getattr(self.config, "notifications", True):
                 notifications.notify_error(f"Model loading failed: {e}")
 
+    def _play_sound(self, sound_type: str):
+        if not getattr(self.config, "play_sound", True):
+            return
+        sound_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sounds")
+        if sound_type == "start":
+            sound_path = os.path.join(sound_dir, "start.wav")
+            if os.path.exists(sound_path):
+                winsound.PlaySound(sound_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
+            else:
+                threading.Thread(target=winsound.Beep, args=(1000, 150), daemon=True).start()
+        elif sound_type == "stop":
+            sound_path = os.path.join(sound_dir, "stop.wav")
+            if os.path.exists(sound_path):
+                winsound.PlaySound(sound_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
+            else:
+                threading.Thread(target=winsound.Beep, args=(700, 150), daemon=True).start()
+
     # ── Recording toggle ────────────────────────────────────────────────
 
     def toggle_recording(self):
@@ -144,8 +161,7 @@ class WhisperTranslationApp:
         try:
             self.recorder.start_recording()
             self.tray.update_state(AppState.RECORDING)
-            if getattr(self.config, "play_sound", True):
-                threading.Thread(target=winsound.Beep, args=(1000, 150), daemon=True).start()
+            self._play_sound("start")
             if getattr(self.config, "notifications", True):
                 notifications.notify_recording_started()
         except RecordingError as e:
@@ -158,9 +174,7 @@ class WhisperTranslationApp:
         """Stop recording and transcribe in a background thread."""
         wav_path = self.recorder.stop_recording()
         self.tray.update_state(AppState.TRANSCRIBING)
-        
-        if getattr(self.config, "play_sound", True):
-            threading.Thread(target=winsound.Beep, args=(700, 150), daemon=True).start()
+        self._play_sound("stop")
             
         if getattr(self.config, "notifications", True):
             notifications.notify_recording_stopped()
