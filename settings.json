@@ -1,0 +1,19 @@
+{
+    "model_size": "medium",
+    "language": "de",
+    "device_preference": "cuda",
+    "compute_type_gpu": "float16",
+    "compute_type_cpu": "int8",
+    "auto_copy": true,
+    "auto_paste": false,
+    "hotkey": "ctrl+alt+space",
+    "save_logs": true,
+    "log_level": "INFO",
+    "delete_temp_files": true,
+    "microphone": null,
+    "sample_rate": 16000,
+    "channels": 1,
+    "min_recording_seconds": 0.5,
+    "beam_size": 5,
+    "vad_filter": true
+}
